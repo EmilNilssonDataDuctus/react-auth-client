@@ -1,3 +1,8 @@
+import PropTypes from "prop-types";
+import * as React from "react";
+
+import { STATUS } from "../utils/utils";
+
 const initialState = {
   user: {},
   token: null,

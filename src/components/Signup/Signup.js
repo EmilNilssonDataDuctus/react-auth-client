@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
+import axios from "axios";
+import { useAuth } from "../../contexts/auth-context";
+import { STATUS } from "../../utils/utils";
 import styles from "./Signup.module.scss";
 
 const Signup = () => {
