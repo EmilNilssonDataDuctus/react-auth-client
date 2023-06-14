@@ -48,3 +48,65 @@ const authReducer = (state, action) => {
       throw new Error(`Unhandled action type: ${action.type}`);
   }
 };
+
+const AuthProvider = ({ children }) => {
+  const [state, dispatch] = React.useReducer(authReducer, initialState);
+
+  const login = React.useCallback((user, token, expiresAt) => {
+    dispatch({
+      type: "login",
+      payload: {
+        user,
+        token,
+        expiresAt,
+      },
+    });
+  }, []);
+
+  const logout = React.useCallback(() => {
+    dispatch({
+      type: "logout",
+    });
+  }, []);
+
+  const updateUser = React.useCallback((user) => {
+    dispatch({
+      type: "updateUser",
+      payload: {
+        user,
+      },
+    });
+  }, []);
+
+  const setAuthenticationStatus = React.useCallback((status) => {
+    dispatch({
+      type: "status",
+      payload: {
+        status,
+      },
+    });
+  }, []);
+
+  const value = React.useMemo(
+    () => ({ ...state, login, logout, updateUser, setAuthenticationStatus }),
+    [state, setAuthenticationStatus, login, logout, updateUser]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+const useAuth = () => {
+  const context = React.useContext(AuthContext);
+
+  if (context === undefined) {
+    throw new Error("useAuth must be used within a AuthProvider");
+  }
+
+  return context;
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.element.isRequired,
+};
+
+export { AuthProvider, useAuth };
