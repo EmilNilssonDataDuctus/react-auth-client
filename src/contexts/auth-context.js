@@ -1,19 +1,18 @@
-
 const initialState = {
   user: {},
   token: null,
   expiresAt: null,
   isAuthenticated: false,
-  status: STATUS.PENDING
-}
+  status: STATUS.PENDING,
+};
 
 const AuthContext = React.createContext({
   ...initialState,
-  login: (user= {}, token ="", expiresAt= "") => {},
+  login: (user = {}, token = "", expiresAt = "") => {},
   logout: () => {},
   updateUser: () => {},
-  setAuthenticationStatus: () => {}
-})
+  setAuthenticationStatus: () => {},
+});
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -24,32 +23,28 @@ const authReducer = (state, action) => {
         expiresAt: action.payload.expiresAt,
         isAuthenticated: true,
         verifyingToken: false,
-        status: STATUS.SUCCEEDED
-      }
-      break;
-    
+        status: STATUS.SUCCEEDED,
+      };
+
     case "logout":
       return {
         ...initialState,
-        status: STATUS.IDLE
-      }
-      break;
-  
+        status: STATUS.IDLE,
+      };
+
     case "updateUser":
       return {
         ...state,
-        user: action.payload.user
-      }
-      break;
-  
+        user: action.payload.user,
+      };
+
     case "status":
       return {
         ...state,
-        status: action.payload.status
-      }
-      break;
-  
+        status: action.payload.status,
+      };
+
     default:
-      throw new Error(`Unhandled action type: ${action.type}`)
+      throw new Error(`Unhandled action type: ${action.type}`);
   }
-}
+};
