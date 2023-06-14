@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "./Signup.module.scss";
 
@@ -14,12 +14,35 @@ const Signup = () => {
       username: "",
       email: "",
       password: "",
-      confirmPasswor: "",
+      confirmPassword: "",
     },
     mode: "onChange",
   });
 
-  const onSubmit = async (values) => {};
+  const navigate = useNavigate();
+  const { login, setAuthenticationStatus } = useAuth();
+
+  const onSubmit = async (values) => {
+    const newUser = {
+      name: values.name,
+      username: values.username,
+      email: values.email,
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+    };
+
+    try {
+      setAuthenticationStatus(STATUS.PENDING);
+      const response = await axios.post("/api/auth/sign-up", newUser);
+      setAuthenticationStatus(STATUS.SUCCEEDED);
+      const { user, token, expiresAt } = response.data;
+      login(user, token, expiresAt);
+      navigate("/");
+    } catch (error) {
+      alert(error.response.data.error.message);
+      setAuthenticationStatus(STATUS.FAILED);
+    }
+  };
 
   return (
     <div className={styles.container}>
