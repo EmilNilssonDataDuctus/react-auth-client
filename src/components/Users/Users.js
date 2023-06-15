@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/auth-context";
-import User from "./User/User.js";
+import User from "../User/User.js";
 import styles from "./Users.module.scss";
 
 const Users = () => {
   const { token } = useAuth();
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     axios

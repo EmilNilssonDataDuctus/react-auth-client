@@ -5,6 +5,7 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import MyComponent from "./components/MyComponent/MyComponent";
 import Signup from "./components/Signup/Signup";
+import Users from "./components/Users/Users";
 import { useAuth } from "./contexts/auth-context";
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
     { path: "sign-up", element: <Signup /> },
     { path: "login", element: <Login /> },
     { path: "my-component", element: <MyComponent /> },
+    { path: "users", element: <Users /> },
   ]);
 
   return (
