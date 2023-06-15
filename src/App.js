@@ -1,12 +1,23 @@
 import axios from "axios";
+import PropTypes from "prop-types";
 import { useCallback, useEffect } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+  useLocation,
+} from "react-router-dom";
+
 import Home from "./components/Home/Home";
+import Layout from "./components/Layout/Layout";
 import Login from "./components/Login/Login";
 import MyComponent from "./components/MyComponent/MyComponent";
 import Signup from "./components/Signup/Signup";
+import SplashScreen from "./components/SplashScreen/SplashScreen";
 import Users from "./components/Users/Users";
+
 import { useAuth } from "./contexts/auth-context";
+import { STATUS } from "./utils/utils";
 
 function App() {
   const { login, logout, isAuthenticated, expiresAt } = useAuth();
@@ -55,11 +66,51 @@ function App() {
   }, [expiresAt, isAuthenticated, refreshAccessToken]);
 
   const router = createBrowserRouter([
-    { path: "/", element: <Home /> },
-    { path: "sign-up", element: <Signup /> },
-    { path: "login", element: <Login /> },
-    { path: "my-component", element: <MyComponent /> },
-    { path: "users", element: <Users /> },
+    {
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: (
+            <RequireAuth redirectTo="/sign-up">
+              <Home />
+            </RequireAuth>
+          ),
+        },
+        {
+          path: "sign-up",
+          element: (
+            <RedirectIfLoggedIn redirectTo="/">
+              <Signup />
+            </RedirectIfLoggedIn>
+          ),
+        },
+        {
+          path: "login",
+          element: (
+            <RedirectIfLoggedIn redirectTo="/">
+              <Login />
+            </RedirectIfLoggedIn>
+          ),
+        },
+        {
+          path: "my-component",
+          element: (
+            <RedirectIfLoggedIn redirectTo="/">
+              <MyComponent />
+            </RedirectIfLoggedIn>
+          ),
+        },
+        {
+          path: "users",
+          element: (
+            <RequireAuth redirectTo="/">
+              <Users />
+            </RequireAuth>
+          ),
+        },
+      ],
+    },
   ]);
 
   return (
@@ -68,5 +119,41 @@ function App() {
     </div>
   );
 }
+
+const RequireAuth = ({ children, redirectTo }) => {
+  const { isAuthenticated, status } = useAuth();
+  const location = useLocation();
+
+  if (status === STATUS.PENDING) return <SplashScreen />;
+
+  return isAuthenticated ? (
+    children
+  ) : (
+    <Navigate to={redirectTo} state={{ from: location }} />
+  );
+};
+
+RequireAuth.propTypes = {
+  children: PropTypes.element.isRequired,
+  redirectTo: PropTypes.string.isRequired,
+};
+
+const RedirectIfLoggedIn = ({ children, redirectTo }) => {
+  const { isAuthenticated, status } = useAuth();
+  const location = useLocation();
+
+  if (status === STATUS.PENDING) return <SplashScreen />;
+
+  return isAuthenticated ? (
+    <Navigate to={location.state?.from.pathname || redirectTo} />
+  ) : (
+    children
+  );
+};
+
+RedirectIfLoggedIn.propTypes = {
+  children: PropTypes.element.isRequired,
+  redirectTo: PropTypes.string.isRequired,
+};
 
 export default App;
