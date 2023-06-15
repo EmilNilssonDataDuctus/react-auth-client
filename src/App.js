@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useCallback, useEffect } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import MyComponent from "./components/MyComponent/MyComponent";
 import Signup from "./components/Signup/Signup";
@@ -53,7 +54,7 @@ function App() {
   }, [expiresAt, isAuthenticated, refreshAccessToken]);
 
   const router = createBrowserRouter([
-    { path: "/", element: <h1>Hello World!</h1> },
+    { path: "/", element: <Home /> },
     { path: "sign-up", element: <Signup /> },
     { path: "login", element: <Login /> },
     { path: "my-component", element: <MyComponent /> },
