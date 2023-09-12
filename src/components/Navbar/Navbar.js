@@ -45,10 +45,20 @@ const Navbar = () => {
                     Sign Up
                   </Link>
                 </li>
+                <li className={styles.navigationItem}>
+                  <Link className={styles.navigationLink} to="/my-component">
+                    My component
+                  </Link>
+                </li>
               </>
             )}
             {isAuthenticated && (
               <>
+                <li className={styles.navigationItem}>
+                  <Link className={styles.navigationLink} to="/my-component">
+                    My component
+                  </Link>
+                </li>
                 <li className={styles.navigationItem}>
                   <Link className={styles.navigationLink} to="/login">
                     Users

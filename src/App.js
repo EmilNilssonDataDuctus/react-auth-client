@@ -94,20 +94,16 @@ function App() {
           ),
         },
         {
-          path: "my-component",
-          element: (
-            <RedirectIfLoggedIn redirectTo="/">
-              <MyComponent />
-            </RedirectIfLoggedIn>
-          ),
-        },
-        {
           path: "users",
           element: (
             <RequireAuth redirectTo="/">
               <Users />
             </RequireAuth>
           ),
+        },
+        {
+          path: "/my-component",
+          element: <MyComponent />,
         },
       ],
     },

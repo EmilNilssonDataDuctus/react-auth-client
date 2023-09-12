@@ -28,7 +28,7 @@ const MyComponent = () => {
   };
 
   return (
-    <div>
+    <div style={{marginTop: "200px"}}>
       <div>{types[currentState]}</div>
 
       <input
